@@ -8,6 +8,7 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
 const synth = window.speechSynthesis;
+//synth.lang = 'en-IN';
 
 startBtn.addEventListener("click", () => {
 	recognition.start();
@@ -18,28 +19,35 @@ stopBtn.addEventListener("click", () => {
 });
 
 //let utter = new SpeechSynthesisUtterance("Hi, How are you?");
+
 let utter = new SpeechSynthesisUtterance();
+utter.lang = "hi-IN";
+
 utter.onend= () =>{
 	recognition.start();
 };
 
 const trigger = [
-//0 
-["hi", "hey", "hello"],
-//1
+//0 Greetings
+["hi", "hey", "hello", "howdy"],
+//1 Hows
 ["how are you", "how are things"],
-//2
+//2 Whats
 ["what is going on", "what is up"],
-//3
+//3 Feeling Good
 ["happy", "good", "well", "fantastic", "cool"],
-//4
+//4 Feeling Bad
 ["bad", "bored", "tired", "sad"],
-//5
+//5 
 ["tell me story", "tell me joke"],
 //6
 ["thanks", "thank you"],
 //7
-["bye", "good bye", "goodbye"]
+["bye", "good bye", "goodbye"],
+//8
+["what is your name"],
+//9
+["nice to meet you"]
 ];
 
 
@@ -91,7 +99,7 @@ recognition.onresult = (e) => {
 
 	var reply=[
 	//0 
-	[`Hello! What's your name?`, `Hi! What's your name?`, `Hey! What's your name?`, `Hi there! What's your name?`], 
+	[`Hello, What's your name?`, `Hi, What's your name?`, `Hey, What's your name?`, `Hi there, What's your name?`], 
 	//1
 	[
 		`Fine... how are you ${userName}?`,
@@ -112,7 +120,11 @@ recognition.onresult = (e) => {
 	//6
 	[`You're welcome`, `No problem`],
 	//7
-	[`Goodbye ${userName}`, `See you later ${userName}`]
+	[`Goodbye ${userName}`, `See you later ${userName}`],
+	//8
+	['I am your Interactive Bot.'],
+	//9
+	[`Nice to meet you too ${userName}`]
 	];
 
 	/*if (transcript === "hello") {
@@ -130,22 +142,35 @@ recognition.onresult = (e) => {
 	if (rawTranscript.includes("my name is")) {
 		var name = rawTranscript.split("my name is");
 		userName = name[1];
-		utter.text = "That is a beautiful name!";
+		utter.text = `Hello ${userName} That is a beautiful name!`;
 		synth.speak(utter);
 	}
+
+	else if (newTranscript.includes("bye") || newTranscript.includes("goodbye")) {
+		recognition.continuous = false;
+		recognition.abort();
+		product = getReply(trigger, reply, newTranscript);
+		utter.text = product;
+		synth.speak(utter);
+	}
+
 	else if(getReply(trigger, reply, rawTranscript)) {
     	product = getReply(trigger, reply, rawTranscript);
 		utter.text = product;
 		synth.speak(utter);
   	}
+
 	else if(getReply(trigger, reply, newTranscript)) {
     	product = getReply(trigger, reply, newTranscript);
 		utter.text = product;
 		synth.speak(utter);
   	}
+
   	else{
     	product = alternative[Math.floor(Math.random() * alternative.length)];
 		utter.text = product;
 		synth.speak(utter);
   	}
+	
+	//recognition.start();
 }
