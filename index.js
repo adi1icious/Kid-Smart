@@ -30,7 +30,7 @@ recognition.onresult = (e) => {
 
 	if (transcript === "hello") {
 		recognition.stop();
-		utter.text = "Adi Drunk";
+		utter.text = "Hello, how are you?";
 		synth.speak(utter);
 	}
 	else if(transcript === "goodbye") {
