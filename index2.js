@@ -10,6 +10,8 @@ recognition.maxAlternatives = 1;
 const synth = window.speechSynthesis;
 //synth.lang = 'en-IN';
 
+var voices = speechSynthesis.getVoices();
+
 startBtn.addEventListener("click", () => {
 	recognition.start();
 });
@@ -19,9 +21,9 @@ stopBtn.addEventListener("click", () => {
 });
 
 //let utter = new SpeechSynthesisUtterance("Hi, How are you?");
-
 let utter = new SpeechSynthesisUtterance();
 utter.lang = "hi-IN";
+//utter.rate = 1.5;
 
 utter.onend= () =>{
 	recognition.start();
@@ -38,21 +40,27 @@ const trigger = [
 ["happy", "good", "well", "fantastic", "cool"],
 //4 Feeling Bad
 ["bad", "bored", "tired", "sad"],
-//5 
-["tell me story", "tell me joke"],
-//6
-["thanks", "thank you"],
+//5 Story
+["tell me a story"],
+//6 Poem
+["tell me a poem"],
 //7
+["thanks", "thank you"],
+//8 Byes
 ["bye", "good bye", "goodbye"],
-//8
-["what is your name"],
 //9
-["nice to meet you"]
+["what is your name"],
+//10
+["nice to meet you"],
+//11
+["what can you do"],
+//12
+["what is my name"]
 ];
 
 
 
-const alternative=["Same","Go on","Try again","I'm listening","Can you say that again?"];
+const alternative=["Sorry I did not hear that, can you try again","I'm listening","Can you say that again?"];
 
 function compare(trigger, input) {
 	if (input.includes(trigger)) {
@@ -100,31 +108,53 @@ recognition.onresult = (e) => {
 	var reply=[
 	//0 
 	[`Hello, What's your name?`, `Hi, What's your name?`, `Hey, What's your name?`, `Hi there, What's your name?`], 
+
 	//1
 	[
 		`Fine... how are you ${userName}?`,
 		`Pretty well, how are you ${userName}?`,
 		`Fantastic, how are you ${userName}?`
 	  ],
+
 	//2
 	[
 		`Nothing much`,
 		`Exciting things!`
 	  ],
+
 	//3
 	[`Glad to hear it`],
+
 	//4
 	[`Why?`, `Cheer up buddy`],
-	//5
-	[`What about?`, `Once upon a time...`],
-	//6
-	[`You're welcome`, `No problem`],
-	//7
-	[`Goodbye ${userName}`, `See you later ${userName}`],
+
+	//5 Stories
+	[`Okay here you go ${userName}, this story is called: The Hare and the Tortoise. Once, a hare saw a tortoise walking slowly with a heavy shell on his back. The hare was very proud of himself and he asked the tortoise. “Shall we have a race?" The tortoise agreed. They started the running race. The hare ran very fast. But the tortoise walked very slowly. The proud hair rested under a tree and soon slept off. But the tortoise walked very fast, slowly and steadily and reached the goal. At last, the tortoise won the race.`,
+	 `Okay here you go ${userName}, this story is called: The Dog at the Well. A dog and her pups lived on a farm, where there was a well. The mother dog told the pups, do not go near the well or play around it. One of the pups wondered why they shouldn’t go to the well and decided to explore it. He went to the well. Climbed up the wall and peeked inside. In there, he saw his reflection and thought it was another dog. The pup saw that the other dog in the well (his reflection) was doing whatever he was doing, and got angry for imitating him. He decided to fight with the dog and jumped into the well, only to find no dog there. He barked and barked and swam until the farmer came and rescued him. The pup had learned his lesson.`,
+	],
+
+	//6 Poem
+	[`Okay here you go ${userName}, this poem is called: Baa Baa Black Sheep. Baa, baa, black sheep, Have you any wool? Yes, sir, yes, sir, Three bags full; One for the master, And one for the dame, And one for the little boy Who lives down the lane.`,
+	 `Okay here you go ${userName}, this poem is called: Twinkle Twinkle Little Star. Twinkle twinkle little star How I wonder what you are? Up above the world so high Like a diamond in the sky Twinkle, twinkle, little star How I wonder what you are?`,
+	],
+
+	//7 Welcomes
+	[`You're welcome`, `No problem`, `No Worries`],
+
 	//8
-	['I am your Interactive Bot.'],
+	[`Goodbye ${userName}`, `See you later ${userName}`],
+
 	//9
-	[`Nice to meet you too ${userName}`]
+	['I am your Interactive Bot.'],
+
+	//10
+	[`Nice to meet you too ${userName}`],
+
+	//11
+	[`I can read you stories, poems and talk to you ${userName}.`],
+	
+	//12
+	[`Your name is ${userName}.`]
 	];
 
 	/*if (transcript === "hello") {
@@ -148,7 +178,7 @@ recognition.onresult = (e) => {
 
 	else if (newTranscript.includes("bye") || newTranscript.includes("goodbye")) {
 		recognition.continuous = false;
-		recognition.abort();
+		//speechSynthesis.stop();
 		product = getReply(trigger, reply, newTranscript);
 		utter.text = product;
 		synth.speak(utter);
